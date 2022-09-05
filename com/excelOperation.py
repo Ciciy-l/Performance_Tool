@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+import os
 
 from openpyxl import load_workbook
 
@@ -6,12 +7,8 @@ from openpyxl import load_workbook
 class ExcelOperations:
 
     def __init__(self, excel_path):
-        self.excel_path = excel_path
+        self.excel_path = os.path.abspath(excel_path)
         self.wb = load_workbook(self.excel_path)
-
-    # def __del__(self):
-    #     self.wb.save(self.excel_path)
-    #     self.wb.close()
 
     def get_sheet_list(self, list_type="name"):
         """
@@ -53,3 +50,21 @@ class ExcelOperations:
         """
         current_sheet = self.wb.active
         [current_sheet.insert_rows(position) for _ in range(rows)]
+
+    def save_wb(self, file_path=None):
+        """
+        保存修改，默认覆盖保存，也可指定保存路径
+        """
+        file_path = self.excel_path if not file_path else file_path
+        self.wb.save(file_path)
+        self.wb.close()
+
+    def close_wb(self):
+        """
+        关闭工作簿
+        """
+        self.wb.close()
+
+    def switch_sheet(self, sheet_name: str):
+        sheet_obj = self.wb[sheet_name]
+        return sheet_obj
