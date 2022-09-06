@@ -1,9 +1,14 @@
 # -*- coding: UTF-8 -*-
+import math
 
 from com.excelOperation import ExcelOperations
-from com.common import read_config
+from com.common import read_config, get_xlsx_filenames_list
 
-if __name__ == '__main__':
+
+def generate_performance_table():
+    """
+    生成绩效合约
+    """
     # 实例化考核条目维护表操作对象
     performance_item_table = ExcelOperations(read_config("path").get("performance_item_table_path"))
     # 获取存在考核条目的岗位列表
@@ -26,19 +31,52 @@ if __name__ == '__main__':
                 items_num = len(valid_items_datas)
                 # 获取新行插入位置
                 position = int(read_config("insert_position").get(item_job))
-                # 模板中插入新行
-                template_tabel.insert_blank_line(position, items_num)
+                # 替换时间标签
+                template_tabel.replacing_labels_in_regions(item_job)
                 # 在新行中写入数据
                 line = 0
                 for row in ws.iter_rows(min_row=position, max_row=position + items_num - 1, min_col=1,
-                                        max_col=len(valid_items_datas[0])):
+                                        max_col=len(valid_items_datas[0]) - 1):
                     data = valid_items_datas[line]
                     for cell, value in zip(row, data.values()):
                         cell.value = value
                     line += 1
+                # 获取模板中预留空行数量
+                blank_rows = int(read_config("template_blank_rows").get(item_job))
+                # 模板中隐藏多余空行
+                template_tabel.hidden_data_lines(position + items_num, blank_rows - items_num)
                 # 生成绩效考核表到指定目录
                 template_tabel.save_wb("{}{}.xlsx".format(read_config("path").get("performance_folder_path"), item_job))
+                # 打开生成的表格
+                new = ExcelOperations("{}{}.xlsx".format(read_config("path").get("performance_folder_path"), item_job))
+                # 删除生成表格中的其他sheet
+                try:
+                    [new.delete_sheet(sheet) for sheet in new.get_sheet_list() if sheet != item_job]
+                except KeyError:
+                    pass
+                # 获取模板中预留空行数量
+                blank_rows = int(read_config("template_blank_rows").get(item_job))
+                # 模板中隐藏多余空行
+                new.hidden_data_lines(position + items_num, blank_rows - items_num, item_job)
+                # 保存生成的表格
+                new.save_wb()
                 # 关闭模板文件
                 template_tabel.close_wb()
 
 
+def summary_performance_table():
+    # 获取datas目录下xlsx文件名列表
+    table_list = get_xlsx_filenames_list(read_config("path").get("performance_summary_data_path"))
+    # 遍历获取每个表格的数据
+    for table in table_list:
+        # 实例化当前表格操作对象
+        current_table = ExcelOperations(table)
+        # 按行获取sheet数据
+        current_table_lines = current_table.get_sheet_datalines()
+        # 获取字段表头所在位置
+        # key_position =
+
+
+if __name__ == '__main__':
+    generate_performance_table()
+    # summary_performance_table()
