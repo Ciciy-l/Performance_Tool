@@ -4,10 +4,6 @@
 /.idea/Performance_Tool.iml
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/vcs.xml
-/各岗位绩效合约/绩效考评得分汇总表.xlsx
-/各岗位绩效合约/市场监管员.xlsx
-/各岗位绩效合约/后勤.xlsx
-/各岗位绩效合约/客户经理.xlsx
-/各岗位绩效合约/综合管理员.xlsx
-/各岗位绩效合约/综合办主任.xlsx
-/各岗位绩效合约/驾驶员.xlsx
+/performance_table/*
+/datas/*
+~$*.xlsx
