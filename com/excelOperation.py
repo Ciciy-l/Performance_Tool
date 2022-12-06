@@ -10,9 +10,9 @@ from com.common import read_config
 
 class ExcelOperations:
 
-    def __init__(self, excel_path):
+    def __init__(self, excel_path, get_func_data=False):
         self.excel_path = os.path.abspath(excel_path)
-        self.wb = load_workbook(self.excel_path)
+        self.wb = load_workbook(self.excel_path, data_only=get_func_data)
 
     def get_sheet_list(self, list_type="name"):
         """
@@ -134,11 +134,15 @@ class ExcelOperations:
                 sheet_obj.merge_cells(start_row=r_min, start_column=_col + 1, end_row=r_max, end_column=_col + 1)
                 # 设置value对齐格式
                 sheet_obj.cell(r_min, _col + 1).alignment = Alignment(horizontal=h, vertical=v, wrapText=True)
+                # 计算权重 TODO HardCoding 后续需要参数化
+                sheet_obj.cell(r_min, _col + 1, value="=SUM(F{}:F{})/100".format(r_min, r_max))
 
-    def replacing_labels_in_regions(self, sheet_name=None):
+    def replacing_labels_in_regions(self, sheet_name=None, input_replace_dict=None, mode="text"):
         """
-        替换模板中的标签
-        :param sheet_name:sheet名称
+        替换excel中的标签
+        :param sheet_name:
+        :param mode: "text"-普通文本替换 "time"-时间戳格式化替换
+        :param input_replace_dict： 运行中替换信息dict
         """
         if sheet_name:
             sheet_obj = self.wb[sheet_name]
@@ -151,8 +155,18 @@ class ExcelOperations:
                     cell_text = str(cell.value)
                     for label in replace_dict.keys():
                         if label in cell_text:
-                            new_text = cell_text.replace(label, time.strftime(replace_dict.get(label)))
+                            # 初始化变量
+                            new_text = cell_text
+                            if mode == "time":
+                                new_text = cell_text.replace(label, time.strftime(replace_dict.get(label)))
+                            elif mode == "text":
+                                new_text = cell_text.replace(label, replace_dict.get(label))
                             cell.value = new_text
+                    if input_replace_dict:
+                        for text in input_replace_dict.keys():
+                            if text in cell_text:
+                                new_text = cell_text.replace(text, str(input_replace_dict.get(text)))
+                                cell.value = new_text
 
     def delete_sheet(self, sheet_name=None):
         """
@@ -184,3 +198,9 @@ class ExcelOperations:
         else:
             sheet_obj = self.wb.active
         return sheet_obj
+
+    def __del__(self):
+        """
+        实例销毁时关闭对应的表格文件
+        """
+        self.close_wb()
