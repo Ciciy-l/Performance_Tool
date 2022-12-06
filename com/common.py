@@ -9,7 +9,7 @@ def read_config(section, filename="config.ini"):
     读取配置文件
     """
     conf = configparser.RawConfigParser()
-    with open(file="./com/{}".format(filename), mode="r", encoding="utf-8") as f:
+    with open(file="./{}".format(filename), mode="r", encoding="utf-8") as f:
         conf.read_file(f)
     return dict(conf.items(section))
 

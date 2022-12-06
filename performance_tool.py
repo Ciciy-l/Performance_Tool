@@ -162,21 +162,25 @@ def summary_performance_table():
 
 if __name__ == '__main__':
     # 命令行运行
-    if len(sys.argv[1:]) == 2:
+    if len(sys.argv[1:]) == 1:
         # 获取参数
         arg = sys.argv[1]
         if arg == "-generate":
             result_info = generate_performance_table()
+            print("已生成各岗位绩效合约至{}".format(os.path.abspath(read_config("path").get("performance_folder_path"))))
             print(result_info) if result_info else None
         elif arg == "-summary":
             result_info = summary_performance_table()
+            print("已汇总人员绩效结果至{}".format(os.path.abspath(read_config("path").get("performance_summary_result_path"))))
             print(result_info) if result_info else None
+        os.system('pause')
     else:
         print("""缺少运行参数！
     -generate 生成绩效合约
     -summary 汇总绩效结果
-
-或在当前目录下直接运行 generate.bat 与 summary.bat""")
+或在当前目录下直接运行 generate.bat 与 summary.bat
+""")
+        os.system('pause')
 
     # result_info = generate_performance_table()
     # result_info = summary_performance_table()
