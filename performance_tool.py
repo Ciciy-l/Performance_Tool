@@ -104,16 +104,19 @@ def summary_performance_table():
         personnel_name = ""
         final_score = ""
         analysis_description_text = ""
+        # 初始化row_id
+        row_id = 1
         # 遍历行获取所需数据
         for line in current_table_lines:
             # print(line)
+            personnel_job = ""
             if line[0] and isinstance(line, list):
                 # 获取岗位与姓名
                 if " 被考评人" in line[0]:
                     # 获取岗位信息
-                    # s_index = line[0].find("岗位")
-                    # e_index = line[0].find("部门")
-                    # personnel_job = line[0][s_index:e_index].strip("岗位").strip("部门").strip(" ").strip("：")
+                    s_index = line[0].find("岗位")
+                    e_index = line[0].find("部门")
+                    personnel_job = line[0][s_index:e_index].strip("岗位").strip("部门").strip(" ").strip("：")
                     # 获取姓名信息
                     s_index = line[0].find("被考评人：")
                     e_index = line[0].find("直接上级：")
@@ -121,10 +124,16 @@ def summary_performance_table():
                 # 获取最终得分
                 elif "最后评分" in line[0]:
                     final_score = line[0][line[0].find("=") + 1:]
-                # 获取并汇总分析说明
-                elif line[-1]:
-                    analysis_description_list.append(line[-1])
-                    analysis_description_text = "；".join(analysis_description_list)
+            # 获取当前岗位的考核项目起始行号
+            if personnel_job:
+                start_row = read_config("insert_position").get(personnel_job)
+            else:
+                start_row = 4
+            # 获取并汇总分析说明
+            if line[-1] and isinstance(line, list) and row_id >= start_row:
+                analysis_description_list.append(line[-1])
+                analysis_description_text = "；".join(analysis_description_list)
+            row_id += 1
         # print(personnel_job, personnel_name, final_score, analysis_description_text)
         result_list.append([index, personnel_name, final_score, analysis_description_text])
         index += 1
