@@ -131,7 +131,7 @@ def summary_performance_table():
                 start_row = 4
             # 获取并汇总分析说明
             if line[-1] and isinstance(line, list) and row_id >= start_row:
-                analysis_description_list.append(line[-1])
+                analysis_description_list.append(str(line[-1]))
                 analysis_description_text = "；".join(analysis_description_list)
             row_id += 1
         # print(personnel_job, personnel_name, final_score, analysis_description_text)
