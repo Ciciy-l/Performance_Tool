@@ -123,7 +123,7 @@ def summary_performance_table():
                     final_score = line[0][line[0].find("=") + 1:]
                 # 获取并汇总分析说明
                 elif line[-1]:
-                    analysis_description_list.append(line[-1])
+                    analysis_description_list.append(str(line[-1]))
                     analysis_description_text = "；".join(analysis_description_list)
         # print(personnel_job, personnel_name, final_score, analysis_description_text)
         result_list.append([index, personnel_name, final_score, analysis_description_text])
