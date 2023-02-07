@@ -6,7 +6,6 @@ import sys
 
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow
-from PyQt5.uic import loadUi
 
 from com.common import read_config
 from ui.mainwin import Ui_mainWindow as MainUi
@@ -30,15 +29,22 @@ class MainWin(QMainWindow):
         # 汇总模板配置
         self.main_ui.action_4.triggered.connect(self.open_summary_template)
         # 岗位绩效模板
+        self.main_ui.action.triggered.connect(self.open_performance_template)
 
-
-    def open_performance_item_config(self):
+    @staticmethod
+    def open_performance_item_config():
         """打开绩效条目配置表"""
         os.startfile(os.path.abspath(read_config("path").get("performance_item_table_path")))
 
-    def open_summary_template(self):
+    @staticmethod
+    def open_summary_template():
         """打开汇总模板"""
         os.startfile(os.path.abspath(read_config("path").get("performance_summary_template_path")))
+
+    @staticmethod
+    def open_performance_template():
+        """打开岗位绩效表模板"""
+        os.startfile(os.path.abspath(read_config("path").get("performance_template_path")))
 
     def generate(self):
         pass

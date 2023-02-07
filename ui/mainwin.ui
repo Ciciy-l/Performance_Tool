@@ -6,33 +6,70 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>464</width>
-    <height>267</height>
+    <width>462</width>
+    <height>268</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>MainWindow</string>
+  <property name="cursor">
+   <cursorShape>ArrowCursor</cursorShape>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <property name="windowTitle">
+   <string>绩效合约生成/汇总工具</string>
+  </property>
+  <property name="windowOpacity">
+   <double>0.900000000000000</double>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>441</width>
+      <height>211</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QTableWidget" name="tableWidget"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QTableWidget" name="tableWidget_2"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>464</width>
+     <width>462</width>
      <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
     <property name="title">
-     <string>选项</string>
+     <string>模板</string>
     </property>
     <addaction name="action_2"/>
+    <addaction name="separator"/>
     <addaction name="action_4"/>
-    <addaction name="separator"/>
     <addaction name="action"/>
-    <addaction name="separator"/>
-    <addaction name="action_6"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -43,13 +80,14 @@
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
-     <string>窗口</string>
+     <string>导出</string>
     </property>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
-     <string>关于</string>
+     <string>帮助</string>
     </property>
+    <addaction name="action_3"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -58,16 +96,22 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_2">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>绩效条目配置</string>
    </property>
   </action>
   <action name="action_4">
    <property name="text">
-    <string>汇总模板配置</string>
+    <string>绩效汇总模板</string>
    </property>
   </action>
   <action name="action_6">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>导出</string>
    </property>
@@ -101,6 +145,11 @@
   <action name="action">
    <property name="text">
     <string>岗位绩效模板</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>关于</string>
    </property>
   </action>
  </widget>
