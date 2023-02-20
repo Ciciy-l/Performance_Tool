@@ -229,7 +229,6 @@ class AddFile(QDialog):
                             if src_file.endswith('.xlsx'):
                                 shutil.copy(src_file, target_path)
                                 file_count += 1
-                            # print(src_file)
             self.close()
 
 
