@@ -50,6 +50,10 @@ class MainWin(QMainWindow):
         self.main_ui.action_11.triggered.connect(self.export_personnel_performance_summary)
         # 打开配置文件
         self.main_ui.action_12.triggered.connect(self.open_profile)
+        # 删除所有绩效合约
+        self.main_ui.action_7.triggered.connect(self.delete_all_performance_contract)
+        # 删除所有汇总结果
+        self.main_ui.action_8.triggered.connect(self.delete_all_summary_result)
         # 关于
         self.main_ui.action_3.triggered.connect(self.about_information)
 
@@ -92,6 +96,24 @@ class MainWin(QMainWindow):
     def open_profile():
         """打开配置文件"""
         os.startfile(os.path.abspath("./config.ini"))
+
+    def delete_all_performance_contract(self):
+        """删除所有绩效合约"""
+        if QMessageBox.question(self, "提示", "是否删除所有绩效合约?", QMessageBox.Yes | QMessageBox.No) == QMessageBox.Yes:
+            # 删除performance_folder_path下所有文件而保留文件夹
+            for file in os.listdir(os.path.abspath(read_config("path").get("performance_folder_path"))):
+                if os.path.isfile(os.path.abspath(read_config("path").get("performance_folder_path") + "/" + file)):
+                    os.remove(os.path.abspath(read_config("path").get("performance_folder_path") + "/" + file))
+            QMessageBox.information(self, "OK!", "已成功删除所有绩效合约!", QMessageBox.Yes)
+
+    def delete_all_summary_result(self):
+        """删除所有汇总结果"""
+        if QMessageBox.question(self, "提示", "是否删除所有汇总文件?", QMessageBox.Yes | QMessageBox.No) == QMessageBox.Yes:
+            # 删除datas下所有文件而保留文件夹
+            for file in os.listdir(os.path.abspath(read_config("path").get("performance_summary_data_path"))):
+                if os.path.isfile(os.path.abspath(read_config("path").get("performance_summary_data_path") + "/" + file)):
+                    os.remove(os.path.abspath(read_config("path").get("performance_summary_data_path") + "/" + file))
+            QMessageBox.information(self, "OK!", "已成功删除所有汇总文件!", QMessageBox.Yes)
 
     def generate(self):
         """调用生成功能"""
