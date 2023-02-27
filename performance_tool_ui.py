@@ -75,6 +75,10 @@ class MainWin(QMainWindow):
         # 点击生成按钮时触发更新
         self.main_ui.pushButton.clicked.connect(self.get_generated_performance_table)
         self.main_ui.pushButton_2.clicked.connect(self.get_generating_performance_table)
+        # 双击列表项打开绩效合约
+        self.main_ui.listWidget.itemDoubleClicked.connect(self.open_performance_contract)
+        # 双击列表项打开待汇总文件
+        self.main_ui.listWidget_2.itemDoubleClicked.connect(self.open_summary_file)
 
     @staticmethod
     def open_performance_item_config():
@@ -95,6 +99,44 @@ class MainWin(QMainWindow):
     def open_profile():
         """打开配置文件"""
         os.startfile(os.path.abspath("./config.ini"))
+
+    def open_performance_contract(self):
+        """列表双击打开绩效合约"""
+        if self.main_ui.listWidget.currentItem().text().endswith(".xlsx"):
+            os.startfile(os.path.abspath(read_config("path").get("performance_folder_path") + "/" +
+                                         self.main_ui.listWidget.currentItem().text()))
+
+    def open_summary_file(self):
+        """列表双击打开待汇总文件"""
+        if self.main_ui.listWidget_2.currentItem().text().endswith(".xlsx"):
+            os.startfile(os.path.abspath(read_config("path").get("performance_summary_data_path") + "/" +
+                                         self.main_ui.listWidget_2.currentItem().text()))
+
+    def keyPressEvent(self, e):
+
+        if self.main_ui.listWidget.currentItem() is not None and self.main_ui.listWidget.hasFocus():
+            # 选中列表项目按下delete键删除选中的绩效合约
+            if e.key() == Qt.Key_Delete:
+                if QMessageBox.question(self, "提示", "是否删除选中绩效合约?",
+                                        QMessageBox.Yes | QMessageBox.No) == QMessageBox.Yes:
+                    os.remove(os.path.abspath(read_config("path").get("performance_folder_path") + "/" +
+                                              self.main_ui.listWidget.currentItem().text()))
+                    self.main_ui.listWidget.takeItem(self.main_ui.listWidget.currentRow())
+            # 当按下回车时,打开选中的绩效合约
+            if e.key() == Qt.Key_Return:
+                self.open_performance_contract()
+
+        if self.main_ui.listWidget_2.currentItem() is not None and self.main_ui.listWidget_2.hasFocus():
+            # 选中列表项目按下delete键删除选中的待汇总文件
+            if e.key() == Qt.Key_Delete:
+                if QMessageBox.question(self, "提示", "是否删除选中待汇总文件?",
+                                        QMessageBox.Yes | QMessageBox.No) == QMessageBox.Yes:
+                    os.remove(os.path.abspath(read_config("path").get("performance_summary_data_path") + "/" +
+                                              self.main_ui.listWidget_2.currentItem().text()))
+                    self.main_ui.listWidget_2.takeItem(self.main_ui.listWidget_2.currentRow())
+            # 当按下回车时,打开选中的待汇总文件
+            if e.key() == Qt.Key_Return:
+                self.open_summary_file()
 
     def delete_all_performance_contract(self):
         """删除所有绩效合约"""
