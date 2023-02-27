@@ -46,7 +46,11 @@ def generate_performance_table():
                 # 获取当前岗位考核项目数量
                 items_num = len(valid_items_datas)
                 # 获取新行插入位置
-                position = int(read_config("insert_position").get(item_job))
+                insert_position = read_config("insert_position")
+                if insert_position.get(item_job):
+                    position = int(insert_position.get(item_job))
+                else:
+                    position = int(insert_position.get("default"))
                 # 替换文本标签
                 template_tabel.replacing_labels_in_regions()
                 # 替换时间标签
@@ -69,7 +73,11 @@ def generate_performance_table():
                 except KeyError:
                     pass
                 # 获取对应模板中预留空行数量
-                blank_rows = int(read_config("template_blank_rows").get(item_job))
+                template_blank_rows = read_config("template_blank_rows")
+                if template_blank_rows.get(item_job):
+                    blank_rows = int(template_blank_rows.get(item_job))
+                else:
+                    blank_rows = int(template_blank_rows.get("default"))
                 # 合并类别与权重列单元格
                 new.merge_similar_cells_by_column([1, position, position + items_num - 1], item_job, next_col=True)
                 # 隐藏多余空行
@@ -125,12 +133,16 @@ def summary_performance_table():
                 elif "最后评分" in line[0]:
                     final_score = line[0][line[0].find("=") + 1:]
             # 获取当前岗位的考核项目起始行号
+            insert_position = read_config("insert_position")
             if personnel_job:
-                start_row = read_config("insert_position").get(personnel_job)
+                if insert_position.get(personnel_job):
+                    start_row = insert_position.get(personnel_job)
+                else:
+                    start_row = insert_position.get("default")
             else:
-                start_row = 4
+                start_row = insert_position.get("default")
             # 获取并汇总分析说明
-            if line[-1] and isinstance(line, list) and row_id >= start_row:
+            if line[-1] and isinstance(line, list) and row_id >= int(start_row):
                 analysis_description_list.append(str(line[-1]))
                 analysis_description_text = "；".join(analysis_description_list)
             row_id += 1
