@@ -66,7 +66,6 @@ class MainWin(QMainWindow):
         # 添加文件
         self.main_ui.pushButton_3.clicked.connect(self.open_file_receiving_interface)
 
-
     def list_view(self):
         """listview显示监听"""
         # 计时器定时触发更新
@@ -99,7 +98,8 @@ class MainWin(QMainWindow):
 
     def delete_all_performance_contract(self):
         """删除所有绩效合约"""
-        if QMessageBox.question(self, "提示", "是否删除所有绩效合约?", QMessageBox.Yes | QMessageBox.No) == QMessageBox.Yes:
+        if QMessageBox.question(self, "提示", "是否删除所有绩效合约?",
+                                QMessageBox.Yes | QMessageBox.No) == QMessageBox.Yes:
             # 删除performance_folder_path下所有文件而保留文件夹
             for file in os.listdir(os.path.abspath(read_config("path").get("performance_folder_path"))):
                 if os.path.isfile(os.path.abspath(read_config("path").get("performance_folder_path") + "/" + file)):
@@ -108,10 +108,12 @@ class MainWin(QMainWindow):
 
     def delete_all_summary_result(self):
         """删除所有汇总结果"""
-        if QMessageBox.question(self, "提示", "是否删除所有汇总文件?", QMessageBox.Yes | QMessageBox.No) == QMessageBox.Yes:
+        if QMessageBox.question(self, "提示", "是否删除所有汇总文件?",
+                                QMessageBox.Yes | QMessageBox.No) == QMessageBox.Yes:
             # 删除datas下所有文件而保留文件夹
             for file in os.listdir(os.path.abspath(read_config("path").get("performance_summary_data_path"))):
-                if os.path.isfile(os.path.abspath(read_config("path").get("performance_summary_data_path") + "/" + file)):
+                if os.path.isfile(
+                        os.path.abspath(read_config("path").get("performance_summary_data_path") + "/" + file)):
                     os.remove(os.path.abspath(read_config("path").get("performance_summary_data_path") + "/" + file))
             QMessageBox.information(self, "OK!", "已成功删除所有汇总文件!", QMessageBox.Yes)
 
