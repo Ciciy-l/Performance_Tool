@@ -106,8 +106,10 @@ def summary_performance_table():
         current_table = ExcelOperations(table, get_func_data=True)
         # 按行获取sheet数据
         current_table_lines = current_table.get_sheet_datalines()
-        # 初始化分析说明存放列表
-        analysis_description_list = []
+        # 初始化分析说明加分项存放列表
+        analysis_description_add_list = []
+        # 初始化分析说明扣分项存放列表
+        analysis_description_subtract_list = []
         # 初始化结果变量
         personnel_name = ""
         final_score = ""
@@ -143,9 +145,26 @@ def summary_performance_table():
                 start_row = insert_position.get("default")
             # 获取并汇总分析说明
             if line[-1] and isinstance(line, list) and row_id >= int(start_row):
-                analysis_description_list.append(str(line[-1]))
-                analysis_description_text = "；".join(analysis_description_list)
+                # 获取当前分析说明内容
+                text = str(line[-1])
+                # 判断是加分项还是扣分项，存入相应列表
+                if "加分" in text:
+                    analysis_description_add_list.append(text.strip("加分项").strip(" ").strip("：").strip(":"))
+                elif "扣分" in text:
+                    analysis_description_subtract_list.append(text.strip("扣分项").strip(" ").strip("：").strip(":"))
+                analysis_description_add_text = "；".join(analysis_description_add_list)
+                analysis_description_subtract_text = "；".join(analysis_description_subtract_list)
+                analysis_description_add = []
+                analysis_description_subtract = []
+                if analysis_description_add_text:
+                    analysis_description_add = ["加分项：" + analysis_description_add_text]
+                if analysis_description_subtract_text:
+                    analysis_description_subtract = ["扣分项：" + analysis_description_subtract_text]
+                analysis_description_text = "\n".join(analysis_description_add + analysis_description_subtract)
             row_id += 1
+        # 无加分项或扣分项时，将分析说明文本设为"无加减分项目。"
+        if not analysis_description_add_list and not analysis_description_subtract_list:
+            analysis_description_text = "无加减分项目。"
         # print(personnel_job, personnel_name, final_score, analysis_description_text)
         result_list.append([index, personnel_name, final_score, analysis_description_text])
         index += 1
