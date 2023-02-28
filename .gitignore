@@ -8,3 +8,5 @@
 /datas/*
 ~$*.xlsx
 /*.xlsx
+debug.*
+*.exe
