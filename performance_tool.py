@@ -157,9 +157,9 @@ def summary_performance_table():
                 analysis_description_add = []
                 analysis_description_subtract = []
                 if analysis_description_add_text:
-                    analysis_description_add = ["加分项：" + analysis_description_add_text]
+                    analysis_description_add = ["加分项：" + analysis_description_add_text + "。"]
                 if analysis_description_subtract_text:
-                    analysis_description_subtract = ["扣分项：" + analysis_description_subtract_text]
+                    analysis_description_subtract = ["扣分项：" + analysis_description_subtract_text + "。"]
                 analysis_description_text = "\n".join(analysis_description_add + analysis_description_subtract)
             row_id += 1
         # 无加分项或扣分项时，将分析说明文本设为"无加减分项目。"
