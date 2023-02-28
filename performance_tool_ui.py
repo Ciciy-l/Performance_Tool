@@ -299,6 +299,8 @@ class AddFile(QDialog):
 
 
 def show_gui():
+    # 添加对高分屏的支持
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     # 实例化一个应用对象
     app = QtWidgets.QApplication(sys.argv)
     # 实例化主界面类
